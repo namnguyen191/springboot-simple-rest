@@ -1,15 +1,15 @@
-package dev.fullstacknam.restcruddemo.service;
+// package dev.fullstacknam.restcruddemo.service;
 
-import java.util.List;
+// import java.util.List;
 
-import dev.fullstacknam.restcruddemo.entity.Employee;
+// import dev.fullstacknam.restcruddemo.entity.Employee;
 
-public interface EmployeeService {
-    List<Employee> findAll();
+// public interface EmployeeService {
+// List<Employee> findAll();
 
-    Employee findById(int id);
+// Employee findById(int id);
 
-    Employee save(Employee employee);
+// Employee save(Employee employee);
 
-    void deleteById(int id);
-}
+// void deleteById(int id);
+// }
