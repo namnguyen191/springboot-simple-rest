@@ -1,5 +1,6 @@
 POST http://localhost:8081/api/employees HTTP/1.1
 content-type: application/json
+Authorization: Basic admin:admin123
 
 {
     "firstName": "Nam",

@@ -1,1 +1,2 @@
 GET http://localhost:8081/api/employees/3 HTTP/1.1
+Authorization: Basic john:123
