@@ -9,6 +9,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: employee_directory
     volumes:
       - mysql-data:/var/lib/mysql
     ports:
