@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import dev.fullstacknam.restcruddemo.entity.Course;
 import dev.fullstacknam.restcruddemo.entity.Instructor;
 import dev.fullstacknam.restcruddemo.entity.InstructorDetail;
+import dev.fullstacknam.restcruddemo.entity.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
@@ -115,5 +116,36 @@ public class AppDAOImpl implements AppDAO {
         var course = query.getSingleResult();
 
         return course;
+    }
+
+    @Override
+    public Course findCourseWithStudentsByCourseId(int courseId) {
+        var query = entityManager.createQuery("SELECT c FROM Course c JOIN FETCH c.students WHERE c.id = :id",
+                Course.class);
+        query.setParameter("id", courseId);
+        var course = query.getSingleResult();
+        return course;
+    }
+
+    @Override
+    public Student findStudentWithCoursesByStudentId(int studentId) {
+        var query = entityManager.createQuery("SELECT s FROM Student s JOIN FETCH s.courses WHERE s.id = :id",
+                Student.class);
+        query.setParameter("id", studentId);
+        var student = query.getSingleResult();
+        return student;
+    }
+
+    @Override
+    @Transactional
+    public void updateStudent(Student student) {
+        entityManager.merge(student);
+    }
+
+    @Override
+    @Transactional
+    public void deleteStudentById(int id) {
+        var student = entityManager.find(Student.class, id);
+        entityManager.remove(student);
     }
 }

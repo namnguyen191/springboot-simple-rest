@@ -1,5 +1,8 @@
 package dev.fullstacknam.restcruddemo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,6 +13,7 @@ import dev.fullstacknam.restcruddemo.entity.Course;
 import dev.fullstacknam.restcruddemo.entity.Instructor;
 import dev.fullstacknam.restcruddemo.entity.InstructorDetail;
 import dev.fullstacknam.restcruddemo.entity.Review;
+import dev.fullstacknam.restcruddemo.entity.Student;
 
 @SpringBootApplication
 public class RestcruddemoApplication {
@@ -21,9 +25,16 @@ public class RestcruddemoApplication {
 	@Bean
 	CommandLineRunner commandLineRunner(AppDAO appDAO) {
 		return runner -> {
-			createCourseAndReview(appDAO);
-			getCourseWithReviews(appDAO, 1);
-			deleteCourse(appDAO, 1);
+			createCourseAndStudent(appDAO);
+			var courses = new ArrayList<Course>();
+			courses.add(new Course("SOC 2001"));
+			courses.add(new Course("PHYS 1420"));
+			addMoreCourseToStudent(appDAO, 1, courses);
+			findStudentWithCourses(appDAO, 1);
+			deleteCourse(appDAO, 3);
+			findStudentWithCourses(appDAO, 1);
+			appDAO.deleteStudentById(1);
+			findCourseWithStudents(appDAO, 1);
 		};
 	}
 
@@ -128,5 +139,41 @@ public class RestcruddemoApplication {
 		for (var reviews : course.getReviews()) {
 			System.out.println("Reviews: " + reviews);
 		}
+	}
+
+	private void createCourseAndStudent(AppDAO appDAO) {
+		var course = new Course("ENG 1000");
+		course.addStudent(new Student("John", "Doe", "john.com@mail.com"));
+		course.addStudent(new Student("Marry", "Jane", "jane.mary@hotmail.com"));
+
+		appDAO.createCourse(course);
+	}
+
+	private void findCourseWithStudents(AppDAO appDAO, int courseId) {
+		System.out.println("Finding course with Id: " + courseId);
+		var course = appDAO.findCourseWithStudentsByCourseId(courseId);
+		System.out.println("Course info: " + course);
+		System.out.println("Students in this course:");
+		for (var student : course.getStudents()) {
+			System.err.println(student);
+		}
+	}
+
+	private void findStudentWithCourses(AppDAO appDAO, int studentId) {
+		System.out.println("Finding student with Id: " + studentId);
+		var student = appDAO.findStudentWithCoursesByStudentId(studentId);
+		System.out.println("Stundent info: " + student);
+		System.out.println("Courses that this student's enrolled:");
+		for (var course : student.getCourses()) {
+			System.err.println(course);
+		}
+	}
+
+	private void addMoreCourseToStudent(AppDAO appDAO, int studentId, List<Course> courses) {
+		var student = appDAO.findStudentWithCoursesByStudentId(studentId);
+		for (Course course : courses) {
+			student.addCourse(course);
+		}
+		appDAO.updateStudent(student);
 	}
 }
