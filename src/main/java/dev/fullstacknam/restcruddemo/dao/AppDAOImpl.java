@@ -14,6 +14,15 @@ import jakarta.transaction.Transactional;
 @Repository
 public class AppDAOImpl implements AppDAO {
     private EntityManager entityManager;
+    private int version = 1;
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
     public AppDAOImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -27,7 +36,15 @@ public class AppDAOImpl implements AppDAO {
 
     @Override
     public Instructor findInstructorById(int id) {
-        return entityManager.find(Instructor.class, id);
+        try {
+            var instructor = entityManager.find(Instructor.class, id);
+            if (instructor == null) {
+                throw new RuntimeException("Cannot find instructor");
+            }
+            return instructor;
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot find instructor");
+        }
     }
 
     @Override

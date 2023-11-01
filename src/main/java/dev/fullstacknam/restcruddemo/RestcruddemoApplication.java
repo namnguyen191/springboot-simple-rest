@@ -25,16 +25,10 @@ public class RestcruddemoApplication {
 	@Bean
 	CommandLineRunner commandLineRunner(AppDAO appDAO) {
 		return runner -> {
-			createCourseAndStudent(appDAO);
-			var courses = new ArrayList<Course>();
-			courses.add(new Course("SOC 2001"));
-			courses.add(new Course("PHYS 1420"));
-			addMoreCourseToStudent(appDAO, 1, courses);
-			findStudentWithCourses(appDAO, 1);
-			deleteCourse(appDAO, 3);
-			findStudentWithCourses(appDAO, 1);
-			appDAO.deleteStudentById(1);
-			findCourseWithStudents(appDAO, 1);
+			appDAO.setVersion(2);
+			appDAO.getVersion();
+			createInstructorWithDetail(appDAO);
+			findInstructorById(appDAO, 2);
 		};
 	}
 

@@ -8,6 +8,10 @@ import dev.fullstacknam.restcruddemo.entity.InstructorDetail;
 import dev.fullstacknam.restcruddemo.entity.Student;
 
 public interface AppDAO {
+    int getVersion();
+
+    void setVersion(int version);
+
     void save(Instructor instructor);
 
     Instructor findInstructorById(int id);
